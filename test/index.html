@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="../img/favicon.ico">
+
+    
+    <title>Test - Graph Neural Network</title>
+    
+
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
+    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="../css/base.min.css" rel="stylesheet">
+    <link href="../css/cinder.min.css" rel="stylesheet">
+    <link href="../css/highlight.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+
+     
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+
+            <a class="navbar-brand" href="..">Graph Neural Network</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Test</a>
+                    </li>
+                
+                
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <i class="fas fa-search"></i> Search
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="..">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a rel="next" >
+                            Next <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="first-level active"><a href="#24">2.4 统计判别理论</a></li>
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="24">2.4 统计判别理论<a class="headerlink" href="#24" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>原文</th>
+<th><a href="https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12.pdf#page=37">The Elements of Statistical Learning</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>翻译</td>
+<td>szcf-weiya</td>
+</tr>
+<tr>
+<td>时间</td>
+<td>2016-08-01</td>
+</tr>
+<tr>
+<td>更新</td>
+<td>2018-08-22</td>
+</tr>
+<tr>
+<td>状态</td>
+<td>Done</td>
+</tr>
+</tbody>
+</table>
+<p>这一节我们讨论一小部分理论，这些理论提供构建模型的一个框架，比如我们目前为止所有非正式讨论的模型．我们首先考虑定量输出时的情形，而且从随机变量和概率空间的角度来考虑．记 <span><span class="MathJax_Preview">X\in IR^p</span><script type="math/tex">X\in IR^p</script></span> 为实值随机输入向量，<span><span class="MathJax_Preview">Y\in IR</span><script type="math/tex">Y\in IR</script></span> 为实值随机输出变量，联合概率分布为 <span><span class="MathJax_Preview">\Pr(X,Y)</span><script type="math/tex">\Pr(X,Y)</script></span>．给定输入 <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span>，我们寻找一个函数 <span><span class="MathJax_Preview">f(X)</span><script type="math/tex">f(X)</script></span> 来预测 <span><span class="MathJax_Preview">Y</span><script type="math/tex">Y</script></span>．这个理论需要一个 <strong>损失函数 (loss function)</strong> <span><span class="MathJax_Preview">L(Y,f(X))</span><script type="math/tex">L(Y,f(X))</script></span> 用来惩罚预测中的错误，到目前为止最常用并且最方便的是 <strong>平方误差损失 (squared error loss)</strong>: <span><span class="MathJax_Preview">L(Y,f(X))=(Y-f(X))^2</span><script type="math/tex">L(Y,f(X))=(Y-f(X))^2</script></span>．这促使我们寻找 <span><span class="MathJax_Preview">f</span><script type="math/tex">f</script></span> 的一个准则——预测（平方）误差的期望</p>
+<div>
+<div class="MathJax_Preview">
+\begin{align*}
+EPE(f)&amp;=E(Y-f(X))^2\qquad\qquad\tag{2.9}\\
+&amp;=\int[y-f(x)]^2Pr(dx,dy)\tag{2.10}
+\end{align*}
+</div>
+<script type="math/tex; mode=display">
+\begin{align*}
+EPE(f)&=E(Y-f(X))^2\qquad\qquad\tag{2.9}\\
+&=\int[y-f(x)]^2Pr(dx,dy)\tag{2.10}
+\end{align*}
+</script>
+</div>
+<div>
+<div class="MathJax_Preview">
+\mathbbm{1}
+</div>
+<script type="math/tex; mode=display">
+\mathbbm{1}
+</script>
+</div>
+<p>在 <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span> 的<strong>条件</strong>下，我们可以把 <span><span class="MathJax_Preview">EPE</span><script type="math/tex">EPE</script></span> 写成</p>
+<div>
+<div class="MathJax_Preview">
+\EPE(f) = \E_X\E_{Y\mid X}([Y-f(X)]^2\mid X)\tag{2.11}
+</div>
+<script type="math/tex; mode=display">
+\EPE(f) = \E_X\E_{Y\mid X}([Y-f(X)]^2\mid X)\tag{2.11}
+</script>
+</div>
+<p>而且我们看到使 <span><span class="MathJax_Preview">\EPE</span><script type="math/tex">\EPE</script></span> 逐点最小就足够了：</p>
+<div>
+<div class="MathJax_Preview">
+f(x) = \argmin_c\E_{Y\mid X}([Y-c]^2\mid X=x)\tag{2.12}
+</div>
+<script type="math/tex; mode=display">
+f(x) = \argmin_c\E_{Y\mid X}([Y-c]^2\mid X=x)\tag{2.12}
+</script>
+</div>
+<p>解为</p>
+<div>
+<div class="MathJax_Preview">
+f(x) = \E(Y\mid X=x)\tag{2.13}
+</div>
+<script type="math/tex; mode=display">
+f(x) = \E(Y\mid X=x)\tag{2.13}
+</script>
+</div>
+<div class="admonition note">
+<p class="admonition-title">原书注：</p>
+<p>此处条件是指对联合概率密度分解 <span><span class="MathJax_Preview">\Pr(X, Y ) = \Pr(Y \mid X)\Pr(X)</span><script type="math/tex">\Pr(X, Y ) = \Pr(Y \mid X)\Pr(X)</script></span>，其中 <span><span class="MathJax_Preview">\Pr(Y \mid X) = \Pr(Y, X)/\Pr(X)</span><script type="math/tex">\Pr(Y \mid X) = \Pr(Y, X)/\Pr(X)</script></span>，因此分解成了双变量的积分．</p>
+</div>
+<p>最近邻方法试图直接利用训练数据完成任务．在每一点 <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> 处，我们可能需要输入变量 <span><span class="MathJax_Preview">x_i=x</span><script type="math/tex">x_i=x</script></span> 附近的所有 <span><span class="MathJax_Preview">y_i</span><script type="math/tex">y_i</script></span> 的均值．因为在任一点 <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span>，一般至多有一个观测值，我们令</p>
+<div>
+<div class="MathJax_Preview">
+\hat{f}(x)=\Ave(y_i\mid x_i\in N_k(x))\tag{2.14}
+</div>
+<script type="math/tex; mode=display">
+\hat{f}(x)=\Ave(y_i\mid x_i\in N_k(x))\tag{2.14}
+</script>
+</div>
+<p>其中“Ave”表示平均，<span><span class="MathJax_Preview">N_k(x)</span><script type="math/tex">N_k(x)</script></span> 是集合 <span><span class="MathJax_Preview">\cal{T}</span><script type="math/tex">\cal{T}</script></span> 中离 <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> 最近的 <span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span> 个点的邻域．这里有两个近似</p>
+<ul>
+<li>用样本数据的平均近似期望；</li>
+<li>在每一点的条件（期望）松弛为在离该目标点近的某个区域上的条件（期望）．</li>
+</ul>
+<div>
+<div class="MathJax_Preview">
+\hat{f}(x)=\Ave(y_i\mid x_i\in N_k(x))\tag{2.14}
+</div>
+<script type="math/tex; mode=display">
+\hat{f}(x)=\Ave(y_i\mid x_i\in N_k(x))\tag{2.14}
+</script>
+</div>
+<p>对于规模为 <span><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span> 的大规模训练数据，邻域中的点更可能接近 <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span>，而且当 <span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span> 越大，平均值会更加稳定．事实上，在联合概率分布 <span><span class="MathJax_Preview">\Pr(X,Y)</span><script type="math/tex">\Pr(X,Y)</script></span> 温和正则条件下，可以证明当 <span><span class="MathJax_Preview">N,k \longrightarrow \infty</span><script type="math/tex">N,k \longrightarrow \infty</script></span> 使得 <span><span class="MathJax_Preview">k/N \longrightarrow 0</span><script type="math/tex">k/N \longrightarrow 0</script></span> 时，<span><span class="MathJax_Preview">\hat{f}(x) \longrightarrow \E(Y \mid X = x)</span><script type="math/tex">\hat{f}(x) \longrightarrow \E(Y \mid X = x)</script></span>．根据这个，为什么看得更远，因为似乎我们有个一般的近似量吗？我们经常没有非常大的样本．如果线性或者其它更多结构化的模型是合适的，那么我们经常可以得到比 <span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>-最近邻更稳定的估计，尽管这些知识必须也要从数据中学习．然而还有其它的问题，有时是致命的．在下一个部分我们看到当维数 <span><span class="MathJax_Preview">p</span><script type="math/tex">p</script></span> 变大，<span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>-最近邻的度量大小也随之变大．所以最近邻代替条件会让我们非常失望．收敛仍然保持，但是当维数增长后收敛 <strong>速率 (rate)</strong> 变小．</p>
+<p>线性回归怎样适应这个框架？最简单的解释是假设回归函数 <span><span class="MathJax_Preview">f(x)</span><script type="math/tex">f(x)</script></span> 近似线性</p>
+<div>
+<div class="MathJax_Preview">
+f(x)\approx x^T\beta\tag{2.15}
+</div>
+<script type="math/tex; mode=display">
+f(x)\approx x^T\beta\tag{2.15}
+</script>
+</div>
+<p>这是个基于模型的方式——我们明确用于回归函数的模型．将 <span><span class="MathJax_Preview">f(x)</span><script type="math/tex">f(x)</script></span> 的线性模型插入 <span><span class="MathJax_Preview">\EPE (2.9)</span><script type="math/tex">\EPE (2.9)</script></span> 然后微分，可以理论上解出 <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>
+$$
+\beta = [\E(XX^T)]^{-1}\E(XY)\tag{2.16}
+$$</p>
+<p>注意到我们在 <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span> 上没有条件；而是已经用了我们对函数关系的理解 <strong>整合 <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span> 的值 (pool over values of <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span>)</strong>．最小二乘的解 <span><span class="MathJax_Preview">(2.6)</span><script type="math/tex">(2.6)</script></span> 相当于用训练数据的平均值替换掉 <span><span class="MathJax_Preview">(2.16)</span><script type="math/tex">(2.16)</script></span> 中的期望．</p>
+<p>所以 <span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>-最邻近和最小二乘最终都是根据平均来近似条件期望．但是它们在模型上显著不同．</p>
+<ul>
+<li>最小二乘假设 <span><span class="MathJax_Preview">f(x)</span><script type="math/tex">f(x)</script></span> 是某个整体线性函数的良好近似．</li>
+<li><span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>-最近邻假设 <span><span class="MathJax_Preview">f(x)</span><script type="math/tex">f(x)</script></span> 是局部常值函数的良好近似．</li>
+</ul>
+<p>尽管后者似乎更容易被接受，但我们已经看到我们需要为这种灵活性付出代价．</p>
+<p>这本书中描述的很多技巧都是基于模型的，尽管比严格的线性模型更加灵活．举个例子，可加性模型假设</p>
+<div>
+<div class="MathJax_Preview">
+f(X) = \sum\limits_{j=1}^{p}f_j(X_j)\tag{2.17}
+</div>
+<script type="math/tex; mode=display">
+f(X) = \sum\limits_{j=1}^{p}f_j(X_j)\tag{2.17}
+</script>
+</div>
+<p>这保留着线性模型的可加性，但是每个并列的函数 <span><span class="MathJax_Preview">f_j</span><script type="math/tex">f_j</script></span> 是任意的．结果表明可加模型的最优估计是对于每个并列的函数 <strong>同时 (simultaneously)</strong> 用 <span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>-最邻近去近似 <strong>单变量 (univariate)</strong> 的条件期望．因此在可加性的情况下，通过加上某些（通常不现实）的模型假设在高维中估计条件期望的问题被扫除了．</p>
+<p>是否为 <span><span class="MathJax_Preview">(2.11)</span><script type="math/tex">(2.11)</script></span> 的标准而高兴？如果我们用 <span><span class="MathJax_Preview">L_1</span><script type="math/tex">L_1</script></span> 损失函数 $\E\mid Y-f(X)\mid $ 来替换 <span><span class="MathJax_Preview">L_2</span><script type="math/tex">L_2</script></span> 损失函数会怎么样．这种情况下解是条件中位数，
+$$
+\hat{f}(x) = median(Y \mid X = x)\tag{2.18}
+$$</p>
+<p>条件中位数是另一种定位的方式，而且它的估计比条件均值更加鲁棒． <span><span class="MathJax_Preview">L_1</span><script type="math/tex">L_1</script></span> 准则的导数不连续，阻碍了它们的广泛应用．其它更多耐抵抗 (resistant) 的损失函数会在后面章节中介绍，但是平方误差是分析方便而且是最受欢迎的．</p>
+<p>当输出为类变量 <span><span class="MathJax_Preview">G</span><script type="math/tex">G</script></span> 时，我们应该怎样处理？同样的范例在这里也是可行的，除了我们需要一个不同的损失函数来惩罚预测错误．预测值 <span><span class="MathJax_Preview">\hat{G}</span><script type="math/tex">\hat{G}</script></span> 在 <span><span class="MathJax_Preview">\cal G</span><script type="math/tex">\cal G</script></span> 中取值， <span><span class="MathJax_Preview">\cal G</span><script type="math/tex">\cal G</script></span> 是可能的类别的集合．我们的损失函数可以用 <span><span class="MathJax_Preview">K\times K</span><script type="math/tex">K\times K</script></span> 的矩阵 <span><span class="MathJax_Preview">\mathbf{L}</span><script type="math/tex">\mathbf{L}</script></span> 来表示，其中 <span><span class="MathJax_Preview">K=\card({\cal G})</span><script type="math/tex">K=\card({\cal G})</script></span>．矩阵 <span><span class="MathJax_Preview">\mathbf{L}</span><script type="math/tex">\mathbf{L}</script></span> 对角元为 <span><span class="MathJax_Preview">0</span><script type="math/tex">0</script></span> 且其它地方值非负，其中 <span><span class="MathJax_Preview">L(k,\ell)</span><script type="math/tex">L(k,\ell)</script></span> 为把属于 <span><span class="MathJax_Preview">\cal G_k</span><script type="math/tex">\cal G_k</script></span> 的类分到 <span><span class="MathJax_Preview">\cal G_\ell</span><script type="math/tex">\cal G_\ell</script></span> 的代价．大多数情况下我们用 <span><span class="MathJax_Preview">0</span><script type="math/tex">0</script></span>-<span><span class="MathJax_Preview">1</span><script type="math/tex">1</script></span> <strong>(zero-one)</strong> 损失函数，其中所有的错误分类都被要求一个单位的惩罚．预测错误的期望为</p>
+<div>
+<div class="MathJax_Preview">
+EPE = E[L(G,\hat{G}(X))]\tag{2.19}
+</div>
+<script type="math/tex; mode=display">
+EPE = E[L(G,\hat{G}(X))]\tag{2.19}
+</script>
+</div>
+<p>同样关于联合分布 <span><span class="MathJax_Preview">Pr(G,X)</span><script type="math/tex">Pr(G,X)</script></span> 取期望．再一次考虑条件分布，我们可以写出如下的 <span><span class="MathJax_Preview">EPE</span><script type="math/tex">EPE</script></span></p>
+<div>
+<div class="MathJax_Preview">
+EPE = E_X\sum\limits_{k=1}^KL[{\cal{G}}_k,\hat{G}(X)]Pr({\cal{G}}_k\mid X)\tag{2.20}
+</div>
+<script type="math/tex; mode=display">
+EPE = E_X\sum\limits_{k=1}^KL[{\cal{G}}_k,\hat{G}(X)]Pr({\cal{G}}_k\mid X)\tag{2.20}
+</script>
+</div>
+<p>同样逐点最小化 <span><span class="MathJax_Preview">\EPE</span><script type="math/tex">\EPE</script></span> 就足够了:</p>
+<div>
+<div class="MathJax_Preview">
+\hat{G}(x) = \argmin_{g\in \cal{G}}\sum\limits_{k=1}^KL({\cal{G}}_k,g)\Pr({\cal G}_k\mid X = x)\tag{2.21}
+</div>
+<script type="math/tex; mode=display">
+\hat{G}(x) = \argmin_{g\in \cal{G}}\sum\limits_{k=1}^KL({\cal{G}}_k,g)\Pr({\cal G}_k\mid X = x)\tag{2.21}
+</script>
+</div>
+<p>结合 0-1 损失函数上式简化为</p>
+<div>
+<div class="MathJax_Preview">
+\hat{G}(x) = \argmin_{g\in \cal{G}}[1 − \Pr(g\mid X = x)]\tag{2.22}\label{2.22}\,.
+</div>
+<script type="math/tex; mode=display">
+\hat{G}(x) = \argmin_{g\in \cal{G}}[1 − \Pr(g\mid X = x)]\tag{2.22}\label{2.22}\,.
+</script>
+</div>
+<div class="admonition note">
+<p class="admonition-title">weiya 注：推导 \eqref{2.22}</p>
+<p>注意到，对于 0-1 损失，
+$$
+L(\cG_k, g) = \begin{cases}
+    0 &amp; \text{if } g=\cG_k\
+    1 &amp; \text{if } g\neq \cG_k
+\end{cases}\,,
+$$
+则我们有
+$$
+\sum_{k=1}^KL({\cal{G}}<em>k,g)\Pr(G={\cal G}_k\mid X = x) = \sum</em>{\cG_k\neq g}\Pr(G=\cG_k \mid X=x)=1-\Pr(G=g\mid X=x)\,.
+$$</p>
+</div>
+<p>或者简单地</p>
+<div>
+<div class="MathJax_Preview">
+\hat{G}(X) = {\cal{G}}_k \text{ if } \Pr({\cal{G}}_k\mid X = x) = \underset{g\in{\cal{G}}}{\max } \Pr(g\mid X = x)\tag{2.23}
+</div>
+<script type="math/tex; mode=display">
+\hat{G}(X) = {\cal{G}}_k \text{ if } \Pr({\cal{G}}_k\mid X = x) = \underset{g\in{\cal{G}}}{\max } \Pr(g\mid X = x)\tag{2.23}
+</script>
+</div>
+<p>合理的解决方法被称作 <strong>贝叶斯分类 (Bayes classifier)</strong>，利用条件（离散）分布 <span><span class="MathJax_Preview">\Pr(G\mid X)</span><script type="math/tex">\Pr(G\mid X)</script></span> 分到最合适的类别．对于我们模拟的例子图 2.5 显示了最优的贝叶斯判别边界．贝叶斯分类的误差阶被称作 <strong>贝叶斯阶 (Bayes rate)</strong>．</p>
+<p><img alt="" src="../img/02/fig2.5.png" /></p>
+<blockquote>
+<p>图 2.5：在图 2.1，2.2，和 2.3 中模拟的例子的最优贝叶斯判别边界．因为每个类别的产生密度已知，则判别边界可以准确地计算出来．</p>
+</blockquote>
+<p>再一次我们看到 <span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>-最近邻分类直接近似这个解决方法——在最近邻内占绝大多数恰好意味着这个，除了某一点的条件概率松弛为该点的邻域内的条件概率，而且概率是通过训练样本的比例来估计的．</p>
+<p>假设对于一个二分类的问题，我们采用虚拟变量的方法并且通过二进制变量 <span><span class="MathJax_Preview">Y</span><script type="math/tex">Y</script></span> 编码 <span><span class="MathJax_Preview">G</span><script type="math/tex">G</script></span>，然后进行平方误差损失估计．当 <span><span class="MathJax_Preview">{\cal{G}}_1</span><script type="math/tex">{\cal{G}}_1</script></span> 对应 <span><span class="MathJax_Preview">Y=1</span><script type="math/tex">Y=1</script></span>，有 <span><span class="MathJax_Preview">\hat{f}(X)=\E(Y\mid X)=\Pr(G={\cal{G}}_1\mid X)</span><script type="math/tex">\hat{f}(X)=\E(Y\mid X)=\Pr(G={\cal{G}}_1\mid X)</script></span>．同样对于 <span><span class="MathJax_Preview">K</span><script type="math/tex">K</script></span> 个类别的问题 <span><span class="MathJax_Preview">\E(Y_k\mid X)=\Pr(G={\cal{G}}_k\mid X)</span><script type="math/tex">\E(Y_k\mid X)=\Pr(G={\cal{G}}_k\mid X)</script></span>．这显示了我们虚拟变量回归的过程，然后根据最大的拟合值来分类，这是表示贝叶斯分类器的另一种方式．尽管这个理论是确定的，在实现中问题也会随着采用的回归模型不同而出现．举个例子，当采用线性回归模型，<span><span class="MathJax_Preview">\hat{f}(X)</span><script type="math/tex">\hat{f}(X)</script></span> 不必要为正值，而且我们可能会怀疑用这个作为概率的一个估计．我们将在第四章中讨论构建模型 <span><span class="MathJax_Preview">\Pr(G\mid X)</span><script type="math/tex">\Pr(G\mid X)</script></span> 的各种不同的方式．</p></div>
+        
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        
+        <hr>
+        <p>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
+
+        
+        
+    </footer>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>var base_url = ".."</script>
+    
+    <script src="../js/base.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../search/main.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    </body>
+
+</html>
