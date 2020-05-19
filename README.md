@@ -1,2 +1,2 @@
 # GNN
-for undergraduate thesis
+For studying graph neural network
